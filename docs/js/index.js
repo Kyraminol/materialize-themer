@@ -1,1 +1,1 @@
-M.Themer.init(document.querySelector("body"));
+M.Themer.init(document.querySelector('#themer-select'));
