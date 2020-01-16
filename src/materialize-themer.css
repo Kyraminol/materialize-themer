@@ -1,0 +1,24 @@
+.circle-color {
+    display: inline-block;
+    height: 55px;
+    width: 55px;
+    padding: 3px;
+    border-radius: 50%;
+}
+
+.circle-color.small {
+    height: 40px;
+    width: 40px;
+}
+
+.circle-color.selected {
+    border: 2px solid #000000;
+    border-radius: 50%;
+}
+
+.circle-color div {
+    border: 1px solid rgba(0,0,0,.6);
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+}
