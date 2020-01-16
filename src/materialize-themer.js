@@ -2,6 +2,8 @@
     'use strict';
 
     let _defaults = {
+        main_colors: ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green','light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'grey', 'blue-grey', 'white', 'black'],
+        nuances: ['darken-4', 'darken-3', 'darken-2', 'darken-1', 'default-nuance', 'lighten-1', 'lighten-2', 'lighten-3', 'lighten-4', 'lighten-5', 'accent-1', 'accent-2', 'accent-3', 'accent-4']
     };
 
     class Themer extends Component {
@@ -14,7 +16,7 @@
              * Options for the Themer
              * @member Themer#options
              */
-            this.options = $.extend({}, Themer.defaults, options)
+            this.options = $.extend({}, Themer.defaults, options);
 
             this._setupThemer();
             this._select = M.FormSelect.init(el);
@@ -60,6 +62,25 @@
             wrapper.classList.add('themer-wrapper');
             this._wrapper = wrapper;
 
+            let header;
+
+            header = document.createElement('h4');
+            header.innerText = 'Main Color';
+            wrapper.appendChild(header);
+            this._appendCircles(wrapper, this.options.main_colors);
+            header = document.createElement('h5');
+            header.innerText = 'Main Color Nuance';
+            wrapper.appendChild(header);
+            this._appendCircles(wrapper, this.options.nuances, true);
+            header = document.createElement('h4');
+            header.innerText = 'Text Color';
+            wrapper.appendChild(header);
+            this._appendCircles(wrapper, this.options.main_colors);
+            header = document.createElement('h5');
+            header.innerText = 'Text Color Nuance';
+            wrapper.appendChild(header);
+            this._appendCircles(wrapper, this.options.nuances, true);
+
         }
 
         _setupEventHandlers() {
@@ -69,6 +90,18 @@
         }
 
         _setupStyles() {
+        }
+
+        _appendCircles(el, list, small=false){
+            list.forEach(function(item){
+                let circle = document.createElement('div');
+                circle.classList.add('circle-color');
+                if(small){
+                    circle.classList.add('small')
+                }
+                circle.innerHTML = '<a href="#"><div class="' + item + '"></div></a>';
+                el.appendChild(circle);
+            });
         }
     }
 
