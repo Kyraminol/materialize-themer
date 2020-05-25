@@ -21,6 +21,8 @@
             this._setupThemer();
             this._select = M.FormSelect.init(el);
 
+            this._handleCircleClickBound = this._handleCircleClick.bind(this);
+
             this._setupEventHandlers();
             this._setupStyles();
 
@@ -62,28 +64,45 @@
             wrapper.classList.add('themer-wrapper');
             this._wrapper = wrapper;
 
-            let header;
+            let mainColors = document.createElement('div');
+            mainColors.classList.add('themer-main');
+            let mainColorsHeader = document.createElement('h4');
+            mainColorsHeader.innerText = 'Main Color';
+            mainColors.appendChild(mainColorsHeader);
+            this._appendCircles(mainColors, this.options.main_colors);
 
-            header = document.createElement('h4');
-            header.innerText = 'Main Color';
-            wrapper.appendChild(header);
-            this._appendCircles(wrapper, this.options.main_colors);
-            header = document.createElement('h5');
-            header.innerText = 'Main Color Nuance';
-            wrapper.appendChild(header);
-            this._appendCircles(wrapper, this.options.nuances, true);
-            header = document.createElement('h4');
-            header.innerText = 'Text Color';
-            wrapper.appendChild(header);
-            this._appendCircles(wrapper, this.options.main_colors);
-            header = document.createElement('h5');
-            header.innerText = 'Text Color Nuance';
-            wrapper.appendChild(header);
-            this._appendCircles(wrapper, this.options.nuances, true);
+            let mainColorsNuances = document.createElement('div');
+            mainColorsNuances.classList.add('themer-nuances');
+            let mainColorsNuancesHeader = document.createElement('h5');
+            mainColorsNuancesHeader.innerText = 'Main Color Nuance';
+            mainColorsNuances.appendChild(mainColorsNuancesHeader);
+            this._appendCircles(mainColorsNuances, this.options.nuances, true);
+            mainColors.appendChild(mainColorsNuances);
+
+            let textColors = document.createElement('div');
+            textColors.classList.add('themer-main');
+            let textColorsHeader = document.createElement('h4');
+            textColorsHeader.innerText = 'Text Color';
+            textColors.appendChild(textColorsHeader);
+            this._appendCircles(textColors, this.options.main_colors);
+
+            let textColorsNuances = document.createElement('div');
+            textColorsNuances.classList.add('themer-nuances');
+            let textColorsNuancesHeader = document.createElement('h5');
+            textColorsNuancesHeader.innerText = 'Text Color Nuance';
+            textColorsNuances.appendChild(textColorsNuancesHeader);
+            this._appendCircles(textColorsNuances, this.options.nuances, true);
+            textColors.appendChild(textColorsNuances);
+
+            wrapper.appendChild(textColors);
+            wrapper.appendChild(mainColors);
 
         }
 
         _setupEventHandlers() {
+            this._wrapper.querySelectorAll('.circle-input').forEach(circle => {
+                circle.addEventListener('click', this._handleCircleClickBound);
+            })
         }
 
         _removeEventHandlers() {
@@ -93,15 +112,44 @@
         }
 
         _appendCircles(el, list, small=false){
+            let radioName = [...Array(5)].map(i=>(~~(Math.random()*36)).toString(36)).join('');
             list.forEach(function(item){
+                let id = [...Array(5)].map(i=>(~~(Math.random()*36)).toString(36)).join('');
+                let input = document.createElement('input');
+                input.classList.add('circle-input');
+                input.type = 'radio';
+                input.style.display = 'none';
+                input.id = id;
+                input.name = radioName;
+                input.value = item;
+                input.disabled = true;
+                let label = document.createElement('label');
+                label.htmlFor = id;
                 let circle = document.createElement('div');
                 circle.classList.add('circle-color');
                 if(small){
-                    circle.classList.add('small')
+                    circle.classList.add('small');
                 }
-                circle.innerHTML = '<a href="#"><div class="' + item + '"></div></a>';
-                el.appendChild(circle);
+                circle.innerHTML = '<div data-value="' + item + '" class="' + item + '"></div>';
+                label.appendChild(circle);
+                el.appendChild(input);
+                el.appendChild(label);
             });
+        }
+
+        _handleCircleClick(e){
+            let value = e.target.value;
+            let parent = e.target.parentElement;
+            if(parent.classList.contains('themer-main')) {
+                parent.querySelectorAll('.themer-nuances .circle-color > div').forEach(element => {
+                    let nuance = element.dataset.value;
+                    element.classList.forEach(elClass => {
+                        if(elClass !== nuance) element.classList.remove(elClass);
+                    });
+                    element.classList.add(value);
+                });
+            }
+
         }
     }
 
