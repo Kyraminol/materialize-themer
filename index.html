@@ -167,6 +167,8 @@
   <script src="src/materialize-themer.js"></script>
   <script>
       document.addEventListener('DOMContentLoaded', function(){
+        let themes = JSON.parse(localStorage.getItem('themes') || '{}');
+
         let themer = M.Themer.init(document.querySelector('#themer-select'));
 
         let savedThemesSelect = document.querySelector('#saved-themes');
@@ -175,6 +177,13 @@
         newOption.dataset.theme = themer.getCurrentTheme();
         newOption.innerText = 'Default';
         savedThemesSelect.append(newOption);
+        Object.entries(themes).forEach(theme => {
+          let option = document.createElement('option');
+          option.value = [...Array(5)].map(i=>(~~(Math.random()*36)).toString(36)).join('');
+          option.dataset.theme = theme[1];
+          option.innerText = theme[0];
+          savedThemesSelect.append(option);
+        });
         M.FormSelect.init(savedThemesSelect);
         document.getElementById('save-theme').addEventListener('click', e => {
           e.preventDefault();
@@ -185,10 +194,13 @@
           M.updateTextFields();
           let newOption = document.createElement('option');
           newOption.value = [...Array(5)].map(i=>(~~(Math.random()*36)).toString(36)).join('');
-          newOption.dataset.theme = themer.getCurrentTheme();
+          let theme = themer.getCurrentTheme();
+          newOption.dataset.theme = theme;
           newOption.innerText = value;
           savedThemesSelect.append(newOption);
           M.FormSelect.init(savedThemesSelect);
+          themes[value] = theme;
+          localStorage.setItem('themes', JSON.stringify(themes));
         });
 
         document.getElementById('restore-theme').addEventListener('click', e => {
@@ -202,8 +214,12 @@
           e.preventDefault();
           let value = M.FormSelect.init(savedThemesSelect).getSelectedValues();
           if(value[0] === 'default') return false;
-          savedThemesSelect.querySelector('[value="' + value[0] + '"]').remove();
-          M.FormSelect.init(savedThemesSelect)
+          let el = savedThemesSelect.querySelector('[value="' + value[0] + '"]');
+          let name = el.innerText;
+          el.remove();
+          M.FormSelect.init(savedThemesSelect);
+          delete themes[name];
+          localStorage.setItem('themes', JSON.stringify(themes));
         });
       });
   </script>
