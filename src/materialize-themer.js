@@ -103,14 +103,14 @@
             let theme = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
             document.querySelectorAll('.themer.' + componentName).forEach(component => {
                 component.classList.forEach(className => {
-                    if(this.options.main_colors.includes(className)) theme['main'] = className;
-                    if(this.options.nuances.includes(className)) theme['main-nuance'] = className;
+                    if(theme['main'] === null && this.options.main_colors.includes(className)) theme['main'] = className;
+                    if(theme['main-nuance'] === null && this.options.nuances.includes(className)) theme['main-nuance'] = className;
                 });
             });
             document.querySelectorAll('.themer-text.' + componentName).forEach(component => {
                 component.classList.forEach(className => {
-                    if(this.options.main_colors.includes(className.substring(0, className.length - 5))) theme['text'] = className;
-                    if(this.options.nuances.includes(className.substring(5))) theme['text-nuance'] = className;
+                    if(theme['text'] === null && this.options.main_colors.includes(className.substring(0, className.length - 5))) theme['text'] = className;
+                    if(theme['text-nuance'] === null && this.options.nuances.includes(className.substring(5))) theme['text-nuance'] = className;
                 });
             });
             return theme;
