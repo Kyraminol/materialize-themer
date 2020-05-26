@@ -22,6 +22,10 @@
       i.fa:not(.left) {
         padding-right: 5px;
       }
+
+      nav i.fa.left {
+        line-height: 59px;
+      }
     </style>
   </head>
   <body class="themer background">
@@ -44,7 +48,9 @@
               <div class="input-field">
                 <select multiple id="themer-select" autocomplete="off">
                   <option value="" disabled>Choose component(s)</option>
-                  <option value="navbar">Navbar</option>
+                  <optgroup label="Header">
+                    <option value="navbar">Navbar</option>
+                  </optgroup>
                   <optgroup label="Body">
                     <option value="themer-card">Themer Card</option>
                     <option value="background">Background</option>
