@@ -125,7 +125,7 @@
                 </select>
                 <label for="saved-themes">Saved Themes</label>
               </div>
-              <a href="#" class="btn blue darken-2 themer themer-text saved-card disabled" id="restore-theme"><i class="material-icons left">restore</i>Restore</a>
+              <a href="#" class="btn blue darken-2 themer themer-text saved-card" id="restore-theme"><i class="material-icons left">restore</i>Restore</a>
             </div>
           </div>
         </div>
@@ -169,7 +169,10 @@
         let themer = M.Themer.init(document.querySelector('#themer-select'));
 
         let savedThemesSelect = document.querySelector('#saved-themes');
-        let restoreSavedButton = document.getElementById('restore-theme');
+        let newOption = document.createElement('option');
+        newOption.value = themer.getCurrentTheme();
+        newOption.innerText = 'Default';
+        savedThemesSelect.append(newOption);
         let savedThemesSelectInstance = M.FormSelect.init(savedThemesSelect);
         document.getElementById('save-theme').addEventListener('click', e => {
           e.preventDefault();
@@ -179,18 +182,18 @@
           input.value = '';
           M.updateTextFields();
           let newOption = document.createElement('option');
-            newOption.value = themer.getCurrentTheme();
-            newOption.innerText = value;
-            savedThemesSelect.append(newOption);
-            savedThemesSelectInstance = M.FormSelect.init(savedThemesSelect);
-            restoreSavedButton.classList.remove('disabled');
-          });
+          newOption.value = themer.getCurrentTheme();
+          newOption.innerText = value;
+          savedThemesSelect.append(newOption);
+          savedThemesSelectInstance = M.FormSelect.init(savedThemesSelect);
+        });
 
-          restoreSavedButton.addEventListener('click', e => {
-            e.preventDefault();
-            let value = savedThemesSelectInstance.getSelectedValues();
-            themer.applyTheme(value);
-          });
+        document.getElementById('restore-theme').addEventListener('click', e => {
+          e.preventDefault();
+          savedThemesSelectInstance = M.FormSelect.init(savedThemesSelect);
+          let value = savedThemesSelectInstance.getSelectedValues();
+          themer.applyTheme(value);
+        });
       });
   </script>
   </body>
