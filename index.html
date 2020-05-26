@@ -28,9 +28,9 @@
     <header>
       <nav class="blue darken-2 themer navbar">
         <div class="nav-wrapper container">
-          <a href="#" class="brand-logo left themer navbar-text">materialize-themer</a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="https://github.com/Kyraminol/materialize-themer" target="_blank" class="themer navbar-text"><i class="fa fa-2x fa-github left"></i>Github</a></li>
+          <a href="#" class="brand-logo left themer-text navbar">materialize-themer</a>
+          <ul id="nav-mobile" class="right">
+            <li><a href="https://github.com/Kyraminol/materialize-themer" target="_blank" class="themer-text navbar"><i class="fa fa-2x fa-github left"></i><span class="hide-on-med-and-down">Github</span></a></li>
           </ul>
         </div>
       </nav>
@@ -40,16 +40,21 @@
       <div class="container">
         <div class="row">
           <div class="col s12">
-            <div class="card-panel blue themer themer-card themer-card-text">
+            <div class="card-panel blue themer themer-text themer-card white-text">
               <div class="input-field">
                 <select multiple id="themer-select" autocomplete="off">
                   <option value="" disabled>Choose component(s)</option>
                   <option value="navbar">Navbar</option>
-                  <option value="background">Background</option>
-                  <option value="themer-card">Themer card</option>
-                  <option value="footer">Footer</option>
+                  <optgroup label="Body">
+                    <option value="themer-card">Themer Card</option>
+                    <option value="background">Background</option>
+                  </optgroup>
+                  <optgroup label="Footer">
+                    <option value="footer">Main Footer</option>
+                    <option value="footer-copyright-themer">Footer Copyright</option>
+                  </optgroup>
                 </select>
-                <label for="themer-select" class="grey-text text-darken-3 themer themer-card-text">Themer components</label>
+                <label for="themer-select" class="white-text themer-text themer-card">Themer components</label>
               </div>
 
             </div>
@@ -58,36 +63,31 @@
       </div>
     </main>
 
-    <footer class="page-footer blue darken-2 themer footer">
+    <footer class="page-footer blue darken-2 themer footer" style="padding: 0">
       <div class="container">
-        <div class="row">
+        <div class="row" style="margin: 0">
           <div class="col l6 s12">
-            <h5 class="white-text themer footer-text">Special Thanks</h5>
+            <h5 class="white-text themer-text footer">Special Thanks</h5>
             <ul>
-              <li><a class="themer footer-text grey-text text-lighten-3" href="https://materializecss.com/">Materializecss framework by Materialize team</a></li>
-              <li><a class="themer footer-text grey-text text-lighten-3" href="https://fontawesome.com/">FontAwesome icons by Fonticons</a></li>
+              <li><a class="themer-text footer grey-text text-lighten-2" href="https://materializecss.com/">Materializecss framework by Materialize team</a></li>
+              <li><a class="themer-text footer grey-text text-lighten-2" href="https://fontawesome.com/">FontAwesome icons by Fonticons</a></li>
             </ul>
           </div>
           <div class="col l4 offset-l2 s12">
-            <h5 class="themer footer-text white-text i18n-links">My Links</h5>
+            <h5 class="themer-text footer white-text i18n-links">My Links</h5>
             <ul>
-              <li><a class="themer footer-text grey-text text-lighten-3" href="https://www.linkedin.com/in/gianmarco-randazzo-723520119/" target="_blank"><i class="fa fa-linkedin"></i>LinkedIn</a></li>
-              <li><a class="themer footer-text grey-text text-lighten-3" href="https://www.facebook.com/404Undead" target="_blank"><i class="fa fa-facebook"></i>Facebook</a></li>
-              <li><a class="themer footer-text grey-text text-lighten-3" href="https://www.instagram.com/vereor_nox_xvi/" target="_blank"><i class="fa fa-instagram"></i>Instagram</a></li>
-              <li class="divider"></li>
-              <li><a class="themer footer-text grey-text text-lighten-3" href="https://github.com/Kyraminol" target="_blank"><i class="fa fa-github"></i>Github</a></li>
-              <li><a class="themer footer-text grey-text text-lighten-3" href="https://gitlab.com/Kyraminol" target="_blank"><i class="fa fa-gitlab"></i>Gitlab</a></li>
-              <li class="divider"></li>
-              <li><a class="themer footer-text grey-text text-lighten-3" href="https://t.me/Kyraminol" target="_blank"><i class="fa fa-telegram"></i>Telegram</a></li>
-              <li><a class="themer footer-text grey-text text-lighten-3" href="mailto:gianmarco.randazzo.404@gmail.com"><i class="fa fa-at"></i>E-Mail</a></li>
+              <li><a class="themer-text footer grey-text text-lighten-2" href="https://www.linkedin.com/in/gianmarco-randazzo-723520119/" target="_blank"><i class="fa fa-linkedin"></i>LinkedIn</a></li>
+              <li><a class="themer-text footer grey-text text-lighten-2" href="https://github.com/Kyraminol" target="_blank"><i class="fa fa-github"></i>Github</a></li>
+              <li><a class="themer-text footer grey-text text-lighten-2" href="https://t.me/Kyraminol" target="_blank"><i class="fa fa-telegram"></i>Telegram</a></li>
+              <li><a class="themer-text footer grey-text text-lighten-2" href="mailto:gianmarco.randazzo.404@gmail.com"><i class="fa fa-at"></i>E-Mail</a></li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="footer-copyright blue darken-3 themer footer">
-        <div class="container themer footer-text">
+      <div class="footer-copyright blue darken-3 themer footer-copyright-themer">
+        <div class="container themer-text footer-copyright-themer">
           © 2020 Gianmarco Randazzo
-          <a class="themer footer-text grey-text text-lighten-4 right" href="https://github.com/Kyraminol/materialize-themer" target="_blank"><i class="fa fa-github"></i><span class="i18n-source">Source Code</span></a>
+          <a class="themer-text footer-copyright-themer grey-text text-lighten-4 right" href="https://github.com/Kyraminol/materialize-themer" target="_blank"><i class="fa fa-github"></i><span class="i18n-source">Source Code</span></a>
         </div>
       </div>
     </footer>

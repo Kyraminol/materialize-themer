@@ -71,8 +71,8 @@
                     let valueName = componentValues[0];
                     let valueNew = componentValues[1];
                     let valueOld = this._theme[componentName][valueName];
-                    let selector = '.themer.' + componentName
-                    if(valueName.startsWith('text')) selector += '-text';
+                    let selector = '.themer';
+					selector += valueName.startsWith('text') ? '-text.' + componentName : '.' + componentName;
                     if(valueName === 'text'){
                         if(valueOld) valueOld += '-text';
                         if(valueNew) valueNew += '-text';
@@ -100,7 +100,14 @@
             this._theme = {};
             this._select = M.FormSelect.init(el, {classes: 'themer-select'});
             this._select.$selectOptions.each(option => {
-                if(option.value) this._theme[option.value] = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
+                console.log(option.children);
+                if(option.nodeName === 'OPTGROUP'){
+                    for (let child of option.children){
+                        if(child.value) this._theme[child.value] = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
+                    }
+                } else {
+                    if(option.value) this._theme[option.value] = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
+                }
             });
 
             let picker = document.createElement('div');
@@ -189,10 +196,9 @@
             let key = '';
             key += isText ? 'text' : 'main';
             key += isMain ? '' : '-nuance';
-            let oldValue = this._selectValues > 1 ? null : this._theme[this._selectValues[0]][key];
             if(isMain){
                 parent.querySelectorAll('.themer-nuances .circle-color > div').forEach(element => {
-                    element.classList.remove(oldValue);
+                    element.classList.remove(...this.options.main_colors);
                     element.classList.add(value);
                 });
                 if(value !== 'black' && value !== 'white'){
@@ -201,7 +207,9 @@
                     parent.querySelector('.themer-nuances').classList.add('hide');
                 }
             }
+            console.log(this._theme);
             let newTheme = JSON.parse(JSON.stringify(this._theme));
+            console.log(newTheme);
             this._selectValues.forEach(selected => {
                 newTheme[selected][key] = value;
             })

@@ -41,6 +41,11 @@
     background-color: rgba(0,0,0,0.12) !important;
 }
 
+.themer-select .caret {
+    color: inherit;
+    fill: currentColor;
+}
+
 .themer-select [type="checkbox"]:not(:checked):disabled + span:not(.lever)::before {
     display: none;
 }
@@ -56,4 +61,14 @@
     border-right-color: currentColor;
     border-top-color: transparent;
     border-left-color: transparent;
+}
+
+.themer-select.select-wrapper > input, .themer-select.select-wrapper > input:focus {
+    color: inherit;
+    border-bottom-color: currentColor;
+}
+
+.themer-select li.optgroup {
+    color: inherit;
+    border-top-color: currentColor;
 }
