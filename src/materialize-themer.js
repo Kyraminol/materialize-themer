@@ -99,6 +99,23 @@
             });
         }
 
+        _getDefaultTheme(componentName){
+            let theme = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
+            document.querySelectorAll('.themer.' + componentName).forEach(component => {
+                component.classList.forEach(className => {
+                    if(this.options.main_colors.includes(className)) theme['main'] = className;
+                    if(this.options.nuances.includes(className)) theme['main-nuance'] = className;
+                });
+            });
+            document.querySelectorAll('.themer-text.' + componentName).forEach(component => {
+                component.classList.forEach(className => {
+                    if(this.options.main_colors.includes(className.substring(0, className.length - 5))) theme['text'] = className;
+                    if(this.options.nuances.includes(className.substring(5))) theme['text-nuance'] = className;
+                });
+            });
+            return theme;
+        }
+
         _setupThemer(){
             let el = Themer.getElement(this.el);
             let toWrap = el.parentNode;
@@ -111,12 +128,13 @@
             this._select.$selectOptions.each(option => {
                 if(option.nodeName === 'OPTGROUP'){
                     for (let child of option.children){
-                        if(child.value) this._theme[child.value] = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
+                        if(child.value) this._theme[child.value] = this._getDefaultTheme(child.value);
                     }
                 } else {
-                    if(option.value) this._theme[option.value] = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
+                    if(option.value) this._theme[option.value] = this._getDefaultTheme(child.value);
                 }
             });
+            console.log(this._theme);
 
             let picker = document.createElement('div');
             picker.classList.add('themer-picker', 'hide');
