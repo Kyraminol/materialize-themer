@@ -72,7 +72,7 @@
                     let valueNew = componentValues[1];
                     let valueOld = this._theme[componentName][valueName];
                     let selector = '.themer';
-					selector += valueName.startsWith('text') ? '-text.' + componentName : '.' + componentName;
+                    selector += valueName.startsWith('text') ? '-text.' + componentName : '.' + componentName;
                     if(valueName === 'text'){
                         if(valueOld) valueOld += '-text';
                         if(valueNew) valueNew += '-text';
@@ -100,7 +100,6 @@
             this._theme = {};
             this._select = M.FormSelect.init(el, {classes: 'themer-select'});
             this._select.$selectOptions.each(option => {
-                console.log(option.children);
                 if(option.nodeName === 'OPTGROUP'){
                     for (let child of option.children){
                         if(child.value) this._theme[child.value] = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
@@ -207,9 +206,7 @@
                     parent.querySelector('.themer-nuances').classList.add('hide');
                 }
             }
-            console.log(this._theme);
             let newTheme = JSON.parse(JSON.stringify(this._theme));
-            console.log(newTheme);
             this._selectValues.forEach(selected => {
                 newTheme[selected][key] = value;
             })
