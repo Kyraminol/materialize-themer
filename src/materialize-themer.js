@@ -98,7 +98,7 @@
             wrapper.appendChild(toWrap);
             wrapper.classList.add('themer-wrapper');
             this._theme = {};
-            this._select = M.FormSelect.init(el);
+            this._select = M.FormSelect.init(el, {classes: 'themer-select'});
             this._select.$selectOptions.each(option => {
                 if(option.value) this._theme[option.value] = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
             });

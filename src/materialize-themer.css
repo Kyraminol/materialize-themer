@@ -4,6 +4,7 @@
     width: 55px;
     padding: 3px;
     border-radius: 50%;
+    color: inherit;
 }
 
 .circle-color.small {
@@ -11,8 +12,13 @@
     width: 40px;
 }
 
+.circle-input + label {
+    color: inherit;
+}
+
 .circle-input:checked + label > .circle-color  {
-    border: 2px solid #000000;
+    color: inherit;
+    border: 2px solid currentColor;
     border-radius: 50%;
 }
 
@@ -21,4 +27,33 @@
     border-radius: 50%;
     height: 100%;
     width: 100%;
+}
+
+.themer-wrapper, .themer-wrapper > .input-field, .themer-select, .themer-select * {
+    color: inherit !important;
+}
+
+.themer-wrapper, .themer-wrapper > .input-field, .themer-select, .themer-select li, .themer-select ul {
+    background-color: inherit !important;
+}
+
+.themer-select li:hover{
+    background-color: rgba(0,0,0,0.12) !important;
+}
+
+.themer-select [type="checkbox"]:not(:checked):disabled + span:not(.lever)::before {
+    display: none;
+}
+
+.themer-select [type="checkbox"] + span:not(.lever)::before {
+    color: inherit;
+    border-color: currentColor;
+}
+
+.themer-select [type="checkbox"]:checked + span:not(.lever)::before {
+    color: inherit;
+    border-bottom-color: currentColor;
+    border-right-color: currentColor;
+    border-top-color: transparent;
+    border-left-color: transparent;
 }
