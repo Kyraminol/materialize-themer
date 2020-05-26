@@ -29,7 +29,7 @@
     width: 100%;
 }
 
-.themer-wrapper, .themer-wrapper > .input-field, .themer-select, .themer-select * {
+.themer-wrapper, .themer-wrapper > .input-field, .themer-wrapper > .input-field > label, .themer-select, .themer-select * {
     color: inherit !important;
 }
 

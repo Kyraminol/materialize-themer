@@ -36,6 +36,15 @@
             return super.init(this, els, options);
         }
 
+        getCurrentTheme() {
+            return JSON.stringify(this._theme);
+        }
+
+        applyTheme(theme) {
+            this._applyTheme(JSON.parse(theme));
+            return true;
+        }
+
         /**
          * Get Instance
          */

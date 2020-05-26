@@ -26,6 +26,51 @@
       nav i.fa.left {
         line-height: 59px;
       }
+
+      .input-field, .input-field > label, .select-wrapper, .select-wrapper * {
+        color: inherit !important;
+      }
+
+      .input-field, .select-wrapper, .select-wrapper li, .select-wrapper ul {
+        background-color: inherit !important;
+      }
+
+      .select-wrapper li:hover{
+        background-color: rgba(0,0,0,0.12) !important;
+      }
+
+      .select-wrapper .caret {
+        color: inherit;
+        fill: currentColor;
+      }
+
+      .select-wrapper [type="checkbox"]:not(:checked):disabled + span:not(.lever)::before {
+        display: none;
+      }
+
+      .select-wrapper [type="checkbox"] + span:not(.lever)::before {
+        color: inherit;
+        border-color: currentColor;
+      }
+
+      .select-wrapper [type="checkbox"]:checked + span:not(.lever)::before {
+        color: inherit;
+        border-bottom-color: currentColor;
+        border-right-color: currentColor;
+        border-top-color: transparent;
+        border-left-color: transparent;
+      }
+
+      .select-wrapper > input, .select-wrapper > input:focus, .input-field > input, .input-field > input:focus {
+        color: inherit !important;
+        border-bottom-color: currentColor !important;
+      }
+
+      .select-wrapper li.optgroup {
+        color: inherit;
+        border-top-color: currentColor;
+      }
+
     </style>
   </head>
   <body class="themer background">
@@ -43,26 +88,44 @@
     <main>
       <div class="container">
         <div class="row">
-          <div class="col s12">
-            <div class="card-panel blue themer themer-text themer-card white-text">
-              <div class="input-field">
-                <select multiple id="themer-select" autocomplete="off">
-                  <option value="" disabled>Choose component(s)</option>
-                  <optgroup label="Header">
-                    <option value="navbar">Navbar</option>
-                  </optgroup>
-                  <optgroup label="Body">
-                    <option value="themer-card">Themer Card</option>
-                    <option value="background">Background</option>
-                  </optgroup>
-                  <optgroup label="Footer">
-                    <option value="footer">Main Footer</option>
-                    <option value="footer-copyright-themer">Footer Copyright</option>
-                  </optgroup>
-                </select>
-                <label for="themer-select" class="white-text themer-text themer-card">Themer components</label>
-              </div>
+          <div class="card-panel blue themer themer-text themer-card white-text">
+            <div class="input-field">
+              <select multiple id="themer-select" autocomplete="off">
+                <option value="" disabled>Choose component(s)</option>
+                <optgroup label="Header">
+                  <option value="navbar">Navbar</option>
+                </optgroup>
+                <optgroup label="Body">
+                  <option value="themer-card">Themer Card</option>
+                  <option value="saved-card">Saved Themes Card</option>
+                  <option value="background">Background</option>
+                </optgroup>
+                <optgroup label="Footer">
+                  <option value="footer">Main Footer</option>
+                  <option value="footer-copyright-themer">Footer Copyright</option>
+                </optgroup>
+              </select>
+              <label for="themer-select">Themer components</label>
+            </div>
 
+          </div>
+        </div>
+        <div class="row">
+          <div class="card-panel blue themer themer-text blue white-text saved-card">
+            <div class="row" style="padding-bottom: 30px; background-color: inherit; color: inherit;">
+              <div class="input-field">
+                <input id="save-name" type="text">
+                <label for="save-name">Theme Name</label>
+              </div>
+              <a href="#" class="btn blue darken-2 themer themer-text saved-card" id="save-theme"><i class="material-icons left">save</i>Save</a>
+            </div>
+            <div class="row" style="background-color: inherit; color: inherit;">
+              <div class="input-field">
+                <select id="saved-themes">
+                </select>
+                <label for="saved-themes">Saved Themes</label>
+              </div>
+              <a href="#" class="btn blue darken-2 themer themer-text saved-card disabled" id="restore-theme"><i class="material-icons left">restore</i>Restore</a>
             </div>
           </div>
         </div>
@@ -103,7 +166,31 @@
   <script src="src/materialize-themer.js"></script>
   <script>
       document.addEventListener('DOMContentLoaded', function(){
-          M.Themer.init(document.querySelector('#themer-select'));
+        let themer = M.Themer.init(document.querySelector('#themer-select'));
+
+        let savedThemesSelect = document.querySelector('#saved-themes');
+        let restoreSavedButton = document.getElementById('restore-theme');
+        let savedThemesSelectInstance = M.FormSelect.init(savedThemesSelect);
+        document.getElementById('save-theme').addEventListener('click', e => {
+          e.preventDefault();
+          let input = document.getElementById('save-name');
+          let value = input.value;
+          if(value === '') return false;
+          input.value = '';
+          M.updateTextFields();
+          let newOption = document.createElement('option');
+            newOption.value = themer.getCurrentTheme();
+            newOption.innerText = value;
+            savedThemesSelect.append(newOption);
+            savedThemesSelectInstance = M.FormSelect.init(savedThemesSelect);
+            restoreSavedButton.classList.remove('disabled');
+          });
+
+          restoreSavedButton.addEventListener('click', e => {
+            e.preventDefault();
+            let value = savedThemesSelectInstance.getSelectedValues();
+            themer.applyTheme(value);
+          });
       });
   </script>
   </body>
