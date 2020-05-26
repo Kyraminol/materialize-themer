@@ -134,7 +134,6 @@
                     if(option.value) this._theme[option.value] = this._getDefaultTheme(child.value);
                 }
             });
-            console.log(this._theme);
 
             let picker = document.createElement('div');
             picker.classList.add('themer-picker', 'hide');
