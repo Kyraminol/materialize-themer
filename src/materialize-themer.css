@@ -16,14 +16,6 @@
     border-radius: 50%;
 }
 
-.themer-nuances {
-    display: none;
-}
-
-.circle-input:checked ~ .themer-nuances {
-    display: block;
-}
-
 .circle-color > div {
     border: 1px solid rgba(0,0,0,.6);
     border-radius: 50%;

@@ -19,9 +19,9 @@
             this.options = $.extend({}, Themer.defaults, options);
 
             this._setupThemer();
-            this._select = M.FormSelect.init(el);
 
             this._handleCircleClickBound = this._handleCircleClick.bind(this);
+            this._handleSelectChangeBound = this._handleSelectChange.bind(this);
 
             this._setupEventHandlers();
             this._setupStyles();
@@ -55,6 +55,41 @@
             this._removeEventHandlers();
         }
 
+        _clearElement(element, type){
+            let clearList = type.endsWith('nuance') ? this.options.nuances : this.options.main_colors;
+            clearList.forEach(toRemove => {
+                if(type === 'text-nuance') toRemove = 'text-' + toRemove;
+                if(type === 'text') toRemove += '-text';
+                element.classList.remove(toRemove);
+            })
+        }
+
+        _applyTheme(newTheme){
+            Object.entries(newTheme).forEach(components => {
+                let componentName = components[0];
+                Object.entries(Object(components[1])).forEach(componentValues => {
+                    let valueName = componentValues[0];
+                    let valueNew = componentValues[1];
+                    let valueOld = this._theme[componentName][valueName];
+                    let selector = '.themer.' + componentName
+                    if(valueName.startsWith('text')) selector += '-text';
+                    if(valueName === 'text'){
+                        if(valueOld) valueOld += '-text';
+                        if(valueNew) valueNew += '-text';
+                    } else if(valueName === 'text-nuance') {
+                        if(valueOld) valueOld = 'text-' + valueOld;
+                        if(valueNew) valueNew = 'text-' + valueNew;
+                    }
+                    document.querySelectorAll(selector).forEach(element => {
+                        if(!valueOld && valueNew) this._clearElement(element, valueName);
+                        if(valueOld) element.classList.remove(valueOld);
+                        if(valueNew) element.classList.add(valueNew);
+                    })
+                    this._theme[componentName][valueName] = componentValues[1];
+                });
+            });
+        }
+
         _setupThemer(){
             let el = Themer.getElement(this.el);
             let toWrap = el.parentNode;
@@ -62,8 +97,14 @@
             toWrap.parentNode.insertBefore(wrapper, toWrap);
             wrapper.appendChild(toWrap);
             wrapper.classList.add('themer-wrapper');
-            this._wrapper = wrapper;
+            this._theme = {};
+            this._select = M.FormSelect.init(el);
+            this._select.$selectOptions.each(option => {
+                if(option.value) this._theme[option.value] = {'main': null, 'main-nuance': null, 'text': null, 'text-nuance': null};
+            });
 
+            let picker = document.createElement('div');
+            picker.classList.add('themer-picker', 'hide');
             let mainColors = document.createElement('div');
             mainColors.classList.add('themer-main');
             let mainColorsHeader = document.createElement('h4');
@@ -72,7 +113,7 @@
             this._appendCircles(mainColors, this.options.main_colors);
 
             let mainColorsNuances = document.createElement('div');
-            mainColorsNuances.classList.add('themer-nuances');
+            mainColorsNuances.classList.add('themer-nuances', 'hide');
             let mainColorsNuancesHeader = document.createElement('h5');
             mainColorsNuancesHeader.innerText = 'Main Color Nuance';
             mainColorsNuances.appendChild(mainColorsNuancesHeader);
@@ -80,29 +121,33 @@
             mainColors.appendChild(mainColorsNuances);
 
             let textColors = document.createElement('div');
-            textColors.classList.add('themer-main');
+            textColors.classList.add('themer-main', 'themer-text');
             let textColorsHeader = document.createElement('h4');
             textColorsHeader.innerText = 'Text Color';
             textColors.appendChild(textColorsHeader);
             this._appendCircles(textColors, this.options.main_colors);
 
             let textColorsNuances = document.createElement('div');
-            textColorsNuances.classList.add('themer-nuances');
+            textColorsNuances.classList.add('themer-nuances', 'themer-text', 'hide');
             let textColorsNuancesHeader = document.createElement('h5');
             textColorsNuancesHeader.innerText = 'Text Color Nuance';
             textColorsNuances.appendChild(textColorsNuancesHeader);
             this._appendCircles(textColorsNuances, this.options.nuances, true);
             textColors.appendChild(textColorsNuances);
 
-            wrapper.appendChild(textColors);
-            wrapper.appendChild(mainColors);
+            picker.appendChild(mainColors);
+            picker.appendChild(textColors);
+            wrapper.appendChild(picker);
 
+            this._wrapper = wrapper;
+            this._picker = picker;
         }
 
         _setupEventHandlers() {
             this._wrapper.querySelectorAll('.circle-input').forEach(circle => {
                 circle.addEventListener('click', this._handleCircleClickBound);
             })
+            this._select.el.addEventListener('change', this._handleSelectChangeBound);
         }
 
         _removeEventHandlers() {
@@ -122,7 +167,6 @@
                 input.id = id;
                 input.name = radioName;
                 input.value = item;
-                input.disabled = true;
                 let label = document.createElement('label');
                 label.htmlFor = id;
                 let circle = document.createElement('div');
@@ -130,7 +174,7 @@
                 if(small){
                     circle.classList.add('small');
                 }
-                circle.innerHTML = '<div data-value="' + item + '" class="' + item + '"></div>';
+                circle.innerHTML = '<div class="' + item + '"></div>';
                 label.appendChild(circle);
                 el.appendChild(input);
                 el.appendChild(label);
@@ -140,16 +184,37 @@
         _handleCircleClick(e){
             let value = e.target.value;
             let parent = e.target.parentElement;
-            if(parent.classList.contains('themer-main')) {
+            let isMain = parent.classList.contains('themer-main');
+            let isText = parent.classList.contains('themer-text');
+            let key = '';
+            key += isText ? 'text' : 'main';
+            key += isMain ? '' : '-nuance';
+            let oldValue = this._selectValues > 1 ? null : this._theme[this._selectValues[0]][key];
+            if(isMain){
                 parent.querySelectorAll('.themer-nuances .circle-color > div').forEach(element => {
-                    let nuance = element.dataset.value;
-                    element.classList.forEach(elClass => {
-                        if(elClass !== nuance) element.classList.remove(elClass);
-                    });
+                    element.classList.remove(oldValue);
                     element.classList.add(value);
                 });
+                if(value !== 'black' && value !== 'white'){
+                    parent.querySelector('.themer-nuances').classList.remove('hide');
+                } else {
+                    parent.querySelector('.themer-nuances').classList.add('hide');
+                }
             }
+            let newTheme = JSON.parse(JSON.stringify(this._theme));
+            this._selectValues.forEach(selected => {
+                newTheme[selected][key] = value;
+            })
+            this._applyTheme(newTheme);
+        }
 
+        _handleSelectChange(e){
+            this._selectValues = this._select.getSelectedValues();
+            if(this._selectValues.length > 0){
+                this._picker.classList.remove('hide');
+            } else {
+                this._picker.classList.add('hide');
+            }
         }
     }
 
