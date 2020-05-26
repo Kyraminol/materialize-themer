@@ -223,6 +223,9 @@
             } else {
                 this._picker.classList.add('hide');
             }
+            this._wrapper.querySelectorAll('.themer-picker input:checked').forEach(element => {
+                element.checked = false;
+            });
         }
     }
 
