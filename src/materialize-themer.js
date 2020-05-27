@@ -79,19 +79,15 @@
                 Object.entries(Object(components[1])).forEach(componentValues => {
                     let valueName = componentValues[0];
                     let valueNew = componentValues[1];
-                    let valueOld = this._theme[componentName][valueName];
                     let selector = '.themer';
                     selector += valueName.startsWith('text') ? '-text.' + componentName : '.' + componentName;
                     if(valueName === 'text'){
-                        if(valueOld) valueOld += '-text';
                         if(valueNew) valueNew += '-text';
                     } else if(valueName === 'text-nuance') {
-                        if(valueOld) valueOld = 'text-' + valueOld;
                         if(valueNew) valueNew = 'text-' + valueNew;
                     }
                     document.querySelectorAll(selector).forEach(element => {
-                        if(!valueOld && valueNew) this._clearElement(element, valueName);
-                        if(valueOld) element.classList.remove(valueOld);
+                        this._clearElement(element, valueName);
                         if(valueNew) element.classList.add(valueNew);
                     })
                     this._theme[componentName][valueName] = componentValues[1];
