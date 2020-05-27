@@ -109,8 +109,8 @@
             });
             document.querySelectorAll('.themer-text.' + componentName).forEach(component => {
                 component.classList.forEach(className => {
-                    if(theme['text'] === null && this.options.main_colors.includes(className.substring(0, className.length - 5))) theme['text'] = className;
-                    if(theme['text-nuance'] === null && this.options.nuances.includes(className.substring(5))) theme['text-nuance'] = className;
+                    if(theme['text'] === null && this.options.main_colors.includes(className.substring(0, className.length - 5))) theme['text'] = className.substring(0, className.length - 5);
+                    if(theme['text-nuance'] === null && this.options.nuances.includes(className.substring(5))) theme['text-nuance'] = className.substring(5);
                 });
             });
             return theme;
